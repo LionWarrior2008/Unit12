@@ -16,9 +16,10 @@ class Settings:
         self.botton_h=50
         self.botton_color=(0,135,50)
         self.text_color=(225,225,225)
+        self.font_style=Path.cwd()/'Tektur_Condensed-Black.ttf'
         self.botton_font_size=48
         self.hud_font_size=20        
         self.alien_speed=2.0
         self.fleet_move = 10
         self.fleet_direction = -1
-        self.font_style=Path.cwd()/'Tektur_Condensed-Black.ttf'
+        
