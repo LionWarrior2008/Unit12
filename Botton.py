@@ -13,7 +13,9 @@ class Botton:
         self.rect=pygame.Rect(0,0,self.settings.botton_w,self.settings.botton_h)
         self.rect.center=self.bounderies.center
     def __prep__msg(self,msg):
-        self.msg_image=self.font.render(msg,antialias=)
+        self.msg_image=self.font.render(msg,True,self.settings.text_color,None)
+        self.msg_image_rect=self.msg_image.get_rect()
+        self.msg_image_rect.center=self.rect.center
 
         self.__prep__msg(msg)
     def __prep__msg(self,msg):
@@ -25,4 +27,3 @@ class Botton:
         self.screen.blit(self.msg_image,self.msg_image_rect)
     def check_clicked(self,mouse_pos):
         return self.rect.collidepoint(mouse_pos)
-        pass
