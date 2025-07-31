@@ -6,6 +6,7 @@ from alien import Alien
 from bullet import Bullet
 from time import sleep
 from game_stats import GameStats
+from Botton import Botton
 
 
 class AlienInvasion:
@@ -29,6 +30,7 @@ class AlienInvasion:
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
         self.stats = GameStats(self)
+        self.play_botton=Botton(self, 'Play')
         self.game_active=True
 
     def run_game(self):
@@ -52,6 +54,7 @@ class AlienInvasion:
                 self._check_keydown_events(event)
             elif event.type ==pygame.KEYUP:
                 self._check_keyup_events(event)
+            elif event.type == pygame.MOUSEBOTTONDOWN:
     def _check_keydown_events(self,event):
         if event.key==pygame.K_s:
                 self.ship.moving_down=True
@@ -140,6 +143,9 @@ class AlienInvasion:
         self.ship
         self.aliens.draw(self.screen)
         self._check_fleet_edges()
+        if not self.game_active:
+            self.play_botton.draw()
+            pygame.mouse.set_visible(True)
         pygame.display.flip()
 
 
