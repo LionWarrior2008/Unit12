@@ -31,7 +31,7 @@ class AlienInvasion:
         self._create_fleet()
         self.stats = GameStats(self)
         self.play_botton=Botton(self, 'Play')
-        self.game_active=True
+        self.game_active=False
 
     def run_game(self):
         """Start the main loop for the game."""
@@ -54,7 +54,10 @@ class AlienInvasion:
                 self._check_keydown_events(event)
             elif event.type ==pygame.KEYUP:
                 self._check_keyup_events(event)
-            elif event.type == pygame.MOUSEBOTTONDOWN:
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos=pygame.mouse.get_pos()
+                if self.play_botton.check_clicked(mouse_pos):
+                    self.restart_game()
     def _check_keydown_events(self,event):
         if event.key==pygame.K_s:
                 self.ship.moving_down=True
@@ -128,11 +131,21 @@ class AlienInvasion:
         if not self.aliens:
             self.bullets.empty()
             self._create_fleet()
+    def reset_level(self):
+        self.bullets.empty()
+        self.aliens.empty()
+        self._create_fleet()
+        self.ship.center_ship()
     def _check_aliens_bottum(self):
         for alien in self.aliens.sprites():
             if alien.rect.left<=0:
                 self._ship_hit()
                 break
+    def restart_game(self):
+        self.ship.center_ship()
+        self.reset_level()
+        self.game_active=True
+        pygame.mouse.set_visible(False)
 
     def _update_screen(self):
         """Update images on the screen, and flip to the new screen."""
