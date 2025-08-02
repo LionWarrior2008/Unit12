@@ -1,4 +1,5 @@
 from typing import TYPE_CHECKING
+import json
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
 class GameStats():
@@ -7,6 +8,26 @@ class GameStats():
         self.settings=game.settings
         self.max_score=0
         self.reset_stats()
+        self.init__saved_scores()
+    def init__saved_scores(self):
+        self.path=self.settings.score_file
+        if self.path.exists():
+            contents=self.path.read_text()
+            scores=json.loads(contents)
+            self.high_score=scores.get('high_score',0)
+        else:
+            self.high_score=0
+            self.saves_scores()
+    def saves_scores(self):
+        scores={'High_Score':self.high_score}
+        contents=json.dumps(scores,indent=4)
+        try:
+            self.path.write_text(contents)
+        except FileNotFoundError:
+            print(f"File was not found try again")
+
+
+
     def reset_stats(self):
         self.ship_left=self.settings.ship_limit
         self.score=0
