@@ -7,6 +7,7 @@ from bullet import Bullet
 from time import sleep
 from game_stats import GameStats
 from Botton import Botton
+from game_stats import GameStats
 
 
 class AlienInvasion:
@@ -15,6 +16,7 @@ class AlienInvasion:
         pygame.init()
         self.clock = pygame.time.Clock()
         self.settings = Settings()
+        self.settings.intialise_dynamic_settings()
         self.screen=pygame.display.set_mode((0,0),pygame.FULLSCREEN)
         self.settings.screen_width=self.screen.get_rect().width
         self.settings.screen_height=self.screen.get_rect().height
@@ -116,6 +118,7 @@ class AlienInvasion:
             sleep(0.5)
         else:
             self.game_active=False
+            pygame.mouse.set_visible(True)
     def _change_fleet_direction(self):
         for alien in self.aliens.sprites():
             alien.rect.y += self.settings.fleet_drop_speed 
@@ -129,9 +132,11 @@ class AlienInvasion:
     def _check_bullet_alien_collisions(self):
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
         if not self.aliens:
+            self.settings.increase_diff()
             self.bullets.empty()
             self._create_fleet()
     def reset_level(self):
+        self.settings.intialise_dynamic_settings()
         self.bullets.empty()
         self.aliens.empty()
         self._create_fleet()
@@ -142,6 +147,8 @@ class AlienInvasion:
                 self._ship_hit()
                 break
     def restart_game(self):
+        self.settings.intialise_dynamic_settings()
+        self.stats.ships_left=self.settings.ship_limit
         self.ship.center_ship()
         self.reset_level()
         self.game_active=True
