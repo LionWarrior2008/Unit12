@@ -31,7 +31,7 @@ class AlienInvasion:
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
         self._create_fleet()
-        self.stats = GameStats(self)
+        self.game_stats = GameStats(self)
         self.play_botton=Botton(self, 'Play')
         self.game_active=False
 
@@ -109,8 +109,8 @@ class AlienInvasion:
                 self._change_fleet_direction()
                 break
     def _ship_hit(self):
-        if self.stats.ships_left>0:
-            self.stats.ships_left-=1
+        if self.game_stats.ship_left>0:
+            self.game_stats.ship_left-=1
             self.bullets.empty()
             self.aliens.empty()
             self._create_fleet()
@@ -131,10 +131,13 @@ class AlienInvasion:
         self._check_bullet_alien_collisions()
     def _check_bullet_alien_collisions(self):
         collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        if collisions:
+            self.game_stats.update(collisions)
         if not self.aliens:
             self.settings.increase_diff()
             self.bullets.empty()
             self._create_fleet()
+            self.game_stats.update_level()
     def reset_level(self):
         self.settings.intialise_dynamic_settings()
         self.bullets.empty()
@@ -148,7 +151,7 @@ class AlienInvasion:
                 break
     def restart_game(self):
         self.settings.intialise_dynamic_settings()
-        self.stats.ships_left=self.settings.ship_limit
+        self.game_stats.ship_left =self.settings.ship_limit
         self.ship.center_ship()
         self.reset_level()
         self.game_active=True

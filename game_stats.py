@@ -6,6 +6,7 @@ class GameStats():
         self.game=game
         self.settings=game.settings
         self.max_score=0
+        self.reset_stats()
     def reset_stats(self):
         self.ship_left=self.settings.ship_limit
         self.score=0
@@ -16,12 +17,15 @@ class GameStats():
     def update_max_score(self):
         if self.score>self.max_score:
             self.max_score=self.score
+        print(f"Max:{self.max_score}")
 
     def update_score(self,collisions):
         for alien in collisions.values():
             self.score+=self.settings.alien_points
+        print(f"Max:{self.max_score}")
     def update_level(self):
         self.level+=1
+        print(self.level)
 
 
 
