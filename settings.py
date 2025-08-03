@@ -18,6 +18,7 @@ class Settings:
         self.botton_font_size=48
         self.hud_font_size=20        
         self.fleet_direction = -1
+        self.score_file=Path.cwd()/'scores.json'
     def intialise_dynamic_settings(self):
         self.ship_speed=4
         self.ship_limit = 3
