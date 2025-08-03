@@ -8,18 +8,20 @@ class GameStats():
         self.settings=game.settings
         self.max_score=0
         self.reset_stats()
-        self.init__saved_scores()
-    def init__saved_scores(self):
+        self.init_saved_scores()
+    def init_saved_scores(self):
         self.path=self.settings.score_file
-        if self.path.exists():
+        if self.path.exists() and self.path.stat.__sizeof__()>0:
             contents=self.path.read_text()
+            if not contents:
+                print("File empty")
             scores=json.loads(contents)
             self.high_score=scores.get('high_score',0)
         else:
             self.high_score=0
             self.saves_scores()
     def saves_scores(self):
-        scores={'High_Score':self.high_score}
+        scores={'high_score':self.high_score}
         contents=json.dumps(scores,indent=4)
         try:
             self.path.write_text(contents)
@@ -35,10 +37,15 @@ class GameStats():
     def update(self,collisions):
         self.update_score(collisions)
         self.update_max_score()
+        self.update_High_score()
     def update_max_score(self):
         if self.score>self.max_score:
             self.max_score=self.score
         print(f"Max:{self.max_score}")
+    def update_High_score(self):
+        if self.score>self.high_score:
+            self.high_score=self.score
+            self.saves_scores()
 
     def update_score(self,collisions):
         for alien in collisions.values():
